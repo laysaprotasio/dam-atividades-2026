@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'home_page.dart';
 
 void main() {
   runApp(const PedidoFlashApp());
@@ -25,17 +26,17 @@ class PedidoFlashApp extends StatelessWidget {
           ),
           bodyMedium: TextStyle(
             fontSize: 15,
-            color: Colors.black87,
+            color: Colors.black,
           ),
         ),
 
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.deepOrange,
-          foregroundColor: Colors.white,
+          foregroundColor: Colors.black,
         ),
         useMaterial3: true,
       ),
-      home: const Placeholder(),
+      home: const HomePage(),
     );
   }
 }
