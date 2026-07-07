@@ -78,46 +78,50 @@ class HomePage extends StatelessWidget {
                 itemCount: cardapio.length,
                 itemBuilder: (context, index) {
                   final item = cardapio[index];
-                  return Card(
-                    margin: const EdgeInsets.only(bottom: 12),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Row(
-                        children: [
-                          Icon(item.icone, color: Colors.deepOrange),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: Text(
-                              item.nome,
-                              style: Theme.of(context).textTheme.bodyMedium,
+                  return Opacity(
+                    opacity: item.esgotado ? 0.45 : 1.0,
+                    child: Card(
+                      margin: const EdgeInsets.only(bottom: 12),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Row(
+                          children: [
+                            Icon(item.icone, color: Colors.deepOrange),
+                            const SizedBox(width: 16),
+                            Expanded(
+                              child: Text(
+                                item.nome,
+                                style: Theme.of(context).textTheme.bodyMedium,
+                              ),
                             ),
-                          ),
-                          if (item.promo) ...[
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                                vertical: 3,
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.green,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: const Text(
-                                'PROMO',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold,
+                            if (item.promo) ...[
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 3,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.green,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: const Text(
+                                  'PROMO',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
+                              const SizedBox(width: 8),
+                            ],
+                            Text(
+                              'R\$ ${item.preco.toStringAsFixed(2)}',
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
                             ),
-                            const SizedBox(width: 8),
                           ],
-                          Text(
-                            'R\$ ${item.preco.toStringAsFixed(2)}',
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
                   );
