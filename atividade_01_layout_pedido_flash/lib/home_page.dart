@@ -10,17 +10,39 @@ class HomePage extends StatelessWidget {
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
-          children: const [
-            SizedBox(
+          children: [
+            Container(
               height: 160,
-              child: Center(child: Text('Menu Caixa')),
+              padding: const EdgeInsets.all(16),
+              alignment: Alignment.bottomLeft,
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color(0xFFFF9800), 
+                    Color(0xFFFF5722),
+                  ],
+                ),
+              ),
+              child: const Text(
+                'Menu Caixa',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
-            ListTile(
+            const ListTile(
               leading: Icon(Icons.add_shopping_cart),
               title: Text('Novo Pedido'),
             ),
-            ListTile(leading: Icon(Icons.history), title: Text('Histórico')),
-            ListTile(
+            const ListTile(
+              leading: Icon(Icons.history),
+              title: Text('Histórico'),
+            ),
+            const ListTile(
               leading: Icon(Icons.settings),
               title: Text('Configurações'),
             ),
