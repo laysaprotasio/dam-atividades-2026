@@ -1,7 +1,24 @@
 import 'package:flutter/material.dart';
+import 'menu_item.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
+
+  static const List<MenuItem> cardapio = [
+    MenuItem(nome: 'Pizza Calabresa', preco: 45.00, icone: Icons.local_pizza),
+    MenuItem(
+      nome: 'Chopp Artesanal',
+      preco: 12.00,
+      icone: Icons.sports_bar,
+      promo: true,
+    ),
+    MenuItem(
+      nome: 'Hambúrguer Duplo (Esgotado)',
+      preco: 32.00,
+      icone: Icons.lunch_dining,
+      esgotado: true,
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +36,7 @@ class HomePage extends StatelessWidget {
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [
-                    Color(0xFFFF9800), 
-                    Color(0xFFFF5722),
-                  ],
+                  colors: [Color(0xFFFF9800), Color(0xFFFF5722)],
                 ),
               ),
               child: const Text(
@@ -49,7 +63,32 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-      body: const Center(child: Text('Cardápio')),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Cardápio Rápido',
+              style: Theme.of(context).textTheme.titleLarge,
+            ),
+            const SizedBox(height: 12),
+            Expanded(
+              child: ListView.builder(
+                itemCount: cardapio.length,
+                itemBuilder: (context, index) {
+                  final item = cardapio[index];
+                  return ListTile(
+                    leading: Icon(item.icone),
+                    title: Text(item.nome),
+                    trailing: Text('R\$ ${item.preco.toStringAsFixed(2)}'),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
