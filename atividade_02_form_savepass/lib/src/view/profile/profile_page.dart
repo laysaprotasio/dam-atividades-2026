@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:save_pass/src/controller/sqlite_password_controller.dart';
+import 'package:save_pass/src/model/user_profile_model.dart';
 import 'package:save_pass/ui/colors.dart';
+import 'package:save_pass/ui/components/app_button.dart';
 import 'package:save_pass/ui/components/custom_text_field.dart';
 import 'package:save_pass/ui/text_styles.dart';
 
@@ -56,7 +60,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   controller: _usernameController,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Informe o nome de usuário';
+                      return 'O nome de usuário é obrigatório';
                     }
                     if (value.length < 3) {
                       return 'O nome de usuário deve ter no mínimo 3 caracteres';
@@ -72,7 +76,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   controller: _emailController,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Informe o e-mail de recuperação';
+                      return 'O e-mail é obrigatório';
                     }
                     if (!_emailRegex.hasMatch(value)) {
                       return 'Informe um e-mail válido';
@@ -100,12 +104,28 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Informe a senha';
+                      return 'A senha é obrigatória';
                     }
                     if (value.length < 6) {
                       return 'A senha deve ter no mínimo 6 caracteres';
                     }
                     return null;
+                  },
+                ),
+                const SizedBox(height: 24),
+                AppButton(
+                  text: 'Salvar Perfil',
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      final profile = UserProfileModel(
+                        username: _usernameController.text,
+                        email: _emailController.text,
+                        password: _passwordController.text,
+                      );
+                      context.read<SQlitePasswordController>().saveProfile(
+                        profile,
+                      );
+                    }
                   },
                 ),
               ],
