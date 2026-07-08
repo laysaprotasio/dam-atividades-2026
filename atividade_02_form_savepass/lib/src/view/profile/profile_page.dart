@@ -24,6 +24,7 @@ class _ProfilePageState extends State<ProfilePage> {
   final RegExp _emailRegex = RegExp(r'^[\w\.\-]+@([\w\-]+\.)+[\w\-]{2,4}$');
 
   bool _isObscure = true;
+  bool _initialized = false;
 
   @override
   void dispose() {
@@ -35,6 +36,14 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    final profile = context.watch<SQlitePasswordController>().profile;
+    if (!_initialized && profile != null) {
+      _usernameController.text = profile.username;
+      _emailController.text = profile.email;
+      _passwordController.text = profile.password;
+      _initialized = true;
+    }
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
