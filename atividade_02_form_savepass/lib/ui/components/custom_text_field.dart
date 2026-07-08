@@ -12,6 +12,7 @@ class CustomTextField extends StatelessWidget {
     required this.controller,
     this.borderRadius = const BorderRadius.all(Radius.circular(8)),
     this.onChanged,
+    this.validator,
   });
 
   final String hintText;
@@ -20,11 +21,11 @@ class CustomTextField extends StatelessWidget {
   final Widget? suffix;
   final BorderRadius borderRadius;
   final void Function(String)? onChanged;
+  final String? Function(String?)? validator;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 62,
       decoration: BoxDecoration(
         color: AppColors.black800,
         borderRadius: borderRadius,
@@ -40,8 +41,13 @@ class CustomTextField extends StatelessWidget {
           hintStyle: AppTextStyle.bodyText1.copyWith(color: AppColors.gray500),
           border: const OutlineInputBorder(),
           focusedBorder: const OutlineInputBorder(),
+          contentPadding: const EdgeInsets.symmetric(
+            horizontal: 16,
+            vertical: 20,
+          ),
         ),
         onChanged: onChanged,
+        validator: validator,
       ),
     );
   }
