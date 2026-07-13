@@ -110,6 +110,9 @@ class ProductListPage extends StatelessWidget {
                               children: [
                                 IconButton(
                                   visualDensity: VisualDensity.compact,
+                                  tooltip: product.isFavorite
+                                      ? 'Remover dos favoritos'
+                                      : 'Adicionar aos favoritos',
                                   icon: Icon(
                                     product.isFavorite
                                         ? Icons.favorite
@@ -121,6 +124,7 @@ class ProductListPage extends StatelessWidget {
                                 ),
                                 IconButton(
                                   visualDensity: VisualDensity.compact,
+                                  tooltip: 'Adicionar ao carrinho de compras',
                                   icon: const Icon(Icons.add_shopping_cart, color: Colors.blue),
                                   onPressed: () {
                                     cartViewModel.addToCart(product);
