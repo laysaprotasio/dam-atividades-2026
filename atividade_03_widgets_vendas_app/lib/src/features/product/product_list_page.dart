@@ -53,45 +53,75 @@ class ProductListPage extends StatelessWidget {
           Expanded(
             child: productViewModel.products.isEmpty
                 ? const Center(child: Text('Nenhum produto cadastrado.'))
-                : ListView.builder(
+                : GridView.builder(
+                    padding: const EdgeInsets.all(8.0),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 8.0,
+                      crossAxisSpacing: 8.0,
+                      childAspectRatio: 0.75,
+                    ),
                     itemCount: productViewModel.products.length,
                     itemBuilder: (context, index) {
                       final product = productViewModel.products[index];
-                      return ListTile(
-                        leading: SizedBox(
-                          width: 50,
-                          height: 50,
-                          child: product.imageUrl.isNotEmpty
-                              ? Image.network(
-                                  product.imageUrl,
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (context, error, stackTrace) =>
-                                      const Icon(Icons.broken_image, size: 40),
-                                )
-                              : const Icon(Icons.image, size: 40),
-                        ),
-                        title: Text(product.name),
-                        subtitle: Text(
-                          'R\$ ${product.price.toStringAsFixed(2)} | ${product.category}',
-                        ),
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
+                      return Card(
+                        clipBehavior: Clip.antiAlias,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            IconButton(
-                              icon: Icon(
-                                product.isFavorite
-                                    ? Icons.favorite
-                                    : Icons.favorite_border,
-                                color: product.isFavorite ? Colors.red : null,
-                              ),
-                              onPressed: () =>
-                                  productViewModel.toggleFavorite(product.id),
+                            Expanded(
+                              child: product.imageUrl.isNotEmpty
+                                  ? Image.network(
+                                      product.imageUrl,
+                                      fit: BoxFit.cover,
+                                      errorBuilder: (context, error, stackTrace) =>
+                                          const Icon(Icons.broken_image, size: 40),
+                                    )
+                                  : const Icon(Icons.image, size: 40),
                             ),
-                            IconButton(
-                              icon: const Icon(Icons.add_shopping_cart, color: Colors.blue),
-                              onPressed: () {
-                                cartViewModel.addToCart(product);
-                              },
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8.0,
+                                vertical: 4.0,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    product.name,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    'R\$ ${product.price.toStringAsFixed(2)} | ${product.category}',
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(fontSize: 12),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                IconButton(
+                                  icon: Icon(
+                                    product.isFavorite
+                                        ? Icons.favorite
+                                        : Icons.favorite_border,
+                                    color: product.isFavorite ? Colors.red : null,
+                                  ),
+                                  onPressed: () =>
+                                      productViewModel.toggleFavorite(product.id),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.add_shopping_cart, color: Colors.blue),
+                                  onPressed: () {
+                                    cartViewModel.addToCart(product);
+                                  },
+                                ),
+                              ],
                             ),
                           ],
                         ),
