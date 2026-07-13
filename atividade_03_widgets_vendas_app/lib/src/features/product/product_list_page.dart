@@ -18,6 +18,11 @@ class ProductListPage extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         actions: [
           IconButton(
+            icon: const Icon(Icons.sort),
+            tooltip: 'Ordenar produtos',
+            onPressed: () => _showSortDialog(context, productViewModel),
+          ),
+          IconButton(
             icon: const Icon(Icons.add),
             onPressed: () => Navigator.pushNamed(context, '/products/form'),
             tooltip: 'Adicionar Produto',
@@ -140,6 +145,45 @@ class ProductListPage extends StatelessWidget {
         ],
       ),
       bottomNavigationBar: const CartBottomBanner(),
+    );
+  }
+
+  void _showSortDialog(BuildContext context, ProductViewModel productViewModel) {
+    showDialog(
+      context: context,
+      builder: (context) => SimpleDialog(
+        title: const Text('Ordenar por:'),
+        children: [
+          SimpleDialogOption(
+            onPressed: () {
+              productViewModel.sortByName(ascending: true);
+              Navigator.pop(context);
+            },
+            child: const Text('Nome (A-Z)'),
+          ),
+          SimpleDialogOption(
+            onPressed: () {
+              productViewModel.sortByName(ascending: false);
+              Navigator.pop(context);
+            },
+            child: const Text('Nome (Z-A)'),
+          ),
+          SimpleDialogOption(
+            onPressed: () {
+              productViewModel.sortByPrice(ascending: true);
+              Navigator.pop(context);
+            },
+            child: const Text('Preço (Menor para Maior)'),
+          ),
+          SimpleDialogOption(
+            onPressed: () {
+              productViewModel.sortByPrice(ascending: false);
+              Navigator.pop(context);
+            },
+            child: const Text('Preço (Maior para Menor)'),
+          ),
+        ],
+      ),
     );
   }
 
