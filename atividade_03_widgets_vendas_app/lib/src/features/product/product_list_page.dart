@@ -73,11 +73,14 @@ class ProductListPage extends StatelessWidget {
                               child: product.imageUrl.isNotEmpty
                                   ? Image.network(
                                       product.imageUrl,
+                                      width: double.infinity,
                                       fit: BoxFit.cover,
                                       errorBuilder: (context, error, stackTrace) =>
-                                          const Icon(Icons.broken_image, size: 40),
+                                          const Center(
+                                        child: Icon(Icons.broken_image, size: 40),
+                                      ),
                                     )
-                                  : const Icon(Icons.image, size: 40),
+                                  : const Center(child: Icon(Icons.image, size: 40)),
                             ),
                             Padding(
                               padding: const EdgeInsets.symmetric(
@@ -94,7 +97,7 @@ class ProductListPage extends StatelessWidget {
                                     style: const TextStyle(fontWeight: FontWeight.bold),
                                   ),
                                   Text(
-                                    'R\$ ${product.price.toStringAsFixed(2)} | ${product.category}',
+                                    'R\$ ${product.price.toStringAsFixed(2)}',
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(fontSize: 12),
@@ -103,9 +106,10 @@ class ProductListPage extends StatelessWidget {
                               ),
                             ),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              mainAxisAlignment: MainAxisAlignment.end,
                               children: [
                                 IconButton(
+                                  visualDensity: VisualDensity.compact,
                                   icon: Icon(
                                     product.isFavorite
                                         ? Icons.favorite
@@ -116,11 +120,13 @@ class ProductListPage extends StatelessWidget {
                                       productViewModel.toggleFavorite(product.id),
                                 ),
                                 IconButton(
+                                  visualDensity: VisualDensity.compact,
                                   icon: const Icon(Icons.add_shopping_cart, color: Colors.blue),
                                   onPressed: () {
                                     cartViewModel.addToCart(product);
                                   },
                                 ),
+                                const SizedBox(width: 4),
                               ],
                             ),
                           ],
