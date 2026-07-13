@@ -76,11 +76,9 @@ class ProductListPage extends StatelessWidget {
                                       width: double.infinity,
                                       fit: BoxFit.cover,
                                       errorBuilder: (context, error, stackTrace) =>
-                                          const Center(
-                                        child: Icon(Icons.broken_image, size: 40),
-                                      ),
+                                          _buildImageFallback(),
                                     )
-                                  : const Center(child: Icon(Icons.image, size: 40)),
+                                  : _buildImageFallback(),
                             ),
                             Padding(
                               padding: const EdgeInsets.symmetric(
@@ -142,6 +140,14 @@ class ProductListPage extends StatelessWidget {
         ],
       ),
       bottomNavigationBar: const CartBottomBanner(),
+    );
+  }
+
+  Widget _buildImageFallback() {
+    return Container(
+      color: Colors.grey.shade200,
+      alignment: Alignment.center,
+      child: Icon(Icons.image_not_supported, size: 40, color: Colors.grey.shade500),
     );
   }
 }
