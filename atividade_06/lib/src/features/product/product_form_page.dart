@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:vendas_app/src/models/product_model.dart';
 import 'package:vendas_app/src/features/product/product_viewmodel.dart';
@@ -16,14 +19,52 @@ class _ProductFormPageState extends State<ProductFormPage> {
   final _nameController = TextEditingController();
   final _priceController = TextEditingController();
   String? _selectedCategory;
-  final _imageUrlController = TextEditingController();
+  String? _imagePath;
 
   @override
   void dispose() {
     _nameController.dispose();
     _priceController.dispose();
-    _imageUrlController.dispose();
     super.dispose();
+  }
+
+  Future<void> _pickImage(ImageSource source) async {
+    final pickedFile = await ImagePicker().pickImage(source: source);
+    if (pickedFile != null) {
+      setState(() {
+        _imagePath = pickedFile.path;
+      });
+    }
+  }
+
+  void _showImageSourceSheet() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return SafeArea(
+          child: Wrap(
+            children: [
+              ListTile(
+                leading: const Icon(Icons.photo_camera),
+                title: const Text('Câmera'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _pickImage(ImageSource.camera);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: const Text('Galeria'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _pickImage(ImageSource.gallery);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   void _saveForm() async {
@@ -36,7 +77,8 @@ class _ProductFormPageState extends State<ProductFormPage> {
         name: _nameController.text.trim(),
         price: double.parse(_priceController.text.trim()),
         category: category,
-        imageUrl: _imageUrlController.text.trim(),
+        imageUrl: '',
+        imagePath: _imagePath,
       );
 
       final productViewModel = context.read<ProductViewModel>();
@@ -125,9 +167,36 @@ class _ProductFormPageState extends State<ProductFormPage> {
                 },
               ),
               const SizedBox(height: 16),
-              TextFormField(
-                controller: _imageUrlController,
-                decoration: const InputDecoration(labelText: 'URL da Imagem (Opcional)'),
+              GestureDetector(
+                onTap: _showImageSourceSheet,
+                child: Container(
+                  height: 160,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFEDEDED),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.grey.shade300),
+                  ),
+                  clipBehavior: Clip.antiAlias,
+                  child: _imagePath != null
+                      ? Image.file(
+                          File(_imagePath!),
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          height: double.infinity,
+                        )
+                      : const Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.add_a_photo, size: 36, color: Colors.grey),
+                            SizedBox(height: 8),
+                            Text(
+                              'Toque para selecionar uma foto',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          ],
+                        ),
+                ),
               ),
               const SizedBox(height: 32),
               ElevatedButton(
