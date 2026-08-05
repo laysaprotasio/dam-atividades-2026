@@ -36,6 +36,13 @@ class ClientListPage extends StatelessWidget {
                       ),
                       title: Text(client.name),
                       subtitle: Text('${client.email} | ${client.phone}'),
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          '/clients/detail',
+                          arguments: client,
+                        );
+                      },
                     );
                   },
                 ),
