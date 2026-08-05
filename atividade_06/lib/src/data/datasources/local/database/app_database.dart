@@ -19,11 +19,14 @@ class AppDatabase {
 
     return openDatabase(
       path,
-      version: 2,
+      version: 3,
       onConfigure: (db) => db.execute('PRAGMA foreign_keys = ON'),
       onUpgrade: (db, oldVersion, newVersion) async {
         if (oldVersion < 2) {
           await db.execute('ALTER TABLE products ADD COLUMN imagePath TEXT');
+        }
+        if (oldVersion < 3) {
+          await db.execute('ALTER TABLE clients ADD COLUMN birthDate TEXT');
         }
       },
       onCreate: (db, version) async {
@@ -32,7 +35,8 @@ class AppDatabase {
             id TEXT PRIMARY KEY,
             name TEXT NOT NULL,
             email TEXT NOT NULL,
-            phone TEXT NOT NULL
+            phone TEXT NOT NULL,
+            birthDate TEXT
           )
         ''');
 

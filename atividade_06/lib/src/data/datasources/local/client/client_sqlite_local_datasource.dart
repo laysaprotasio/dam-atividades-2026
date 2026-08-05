@@ -44,6 +44,7 @@ class ClientSqliteLocalDatasource implements ClientLocalDatasource {
       'name': client.name,
       'email': client.email,
       'phone': client.phone,
+      'birthDate': client.birthDate?.toIso8601String(),
     };
   }
 
@@ -53,6 +54,7 @@ class ClientSqliteLocalDatasource implements ClientLocalDatasource {
       name: map['name'] as String,
       email: map['email'] as String,
       phone: map['phone'] as String,
+      birthDate: map['birthDate'] != null ? DateTime.parse(map['birthDate'] as String) : null,
     );
   }
 }
