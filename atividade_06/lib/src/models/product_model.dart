@@ -5,6 +5,7 @@ class ProductModel {
   final String name;
   final double price;
   final String imageUrl;
+  final String? imagePath;
   final String category;
   final bool isFavorite;
 
@@ -13,6 +14,7 @@ class ProductModel {
     required this.name,
     required this.price,
     required this.imageUrl,
+    this.imagePath,
     this.category = 'Geral',
     this.isFavorite = false,
   }) : id = id ?? const Uuid().v4();
@@ -22,6 +24,7 @@ class ProductModel {
     String? name,
     double? price,
     String? imageUrl,
+    String? imagePath,
     String? category,
     bool? isFavorite,
   }) {
@@ -30,6 +33,7 @@ class ProductModel {
       name: name ?? this.name,
       price: price ?? this.price,
       imageUrl: imageUrl ?? this.imageUrl,
+      imagePath: imagePath ?? this.imagePath,
       category: category ?? this.category,
       isFavorite: isFavorite ?? this.isFavorite,
     );
