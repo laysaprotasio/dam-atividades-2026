@@ -2,7 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 import 'package:vendas_app/src/models/product_model.dart';
 import 'package:vendas_app/src/features/product/product_viewmodel.dart';
 import 'package:vendas_app/src/features/category/category_viewmodel.dart';
@@ -67,21 +70,33 @@ class _ProductFormPageState extends State<ProductFormPage> {
     );
   }
 
+  Future<String> _saveImageToAppDirectory(String productId) async {
+    final appDir = await getApplicationDocumentsDirectory();
+    final extension = p.extension(_imagePath!);
+    final savedPath = p.join(appDir.path, 'product_$productId$extension');
+    await File(_imagePath!).copy(savedPath);
+    return savedPath;
+  }
+
   void _saveForm() async {
     if (_formKey.currentState!.validate()) {
       final categoryViewModel = context.read<CategoryViewModel>();
       final categories = categoryViewModel.categories;
       final category = _selectedCategory ?? (categories.isNotEmpty ? categories.first.name : 'Geral');
+      final productViewModel = context.read<ProductViewModel>();
+      final productId = const Uuid().v4();
+
+      final imagePath = _imagePath != null ? await _saveImageToAppDirectory(productId) : null;
 
       final newProduct = ProductModel(
+        id: productId,
         name: _nameController.text.trim(),
         price: double.parse(_priceController.text.trim()),
         category: category,
         imageUrl: '',
-        imagePath: _imagePath,
+        imagePath: imagePath,
       );
 
-      final productViewModel = context.read<ProductViewModel>();
       await productViewModel.addProduct(newProduct);
 
       if (mounted) {
