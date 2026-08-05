@@ -5,6 +5,7 @@ import 'package:vendas_app/src/application/ui/ui_config.dart';
 import 'dependencies.dart';
 import 'features/client/client_list_page.dart';
 import 'features/client/client_form_page.dart';
+import 'features/client/client_detail_page.dart';
 import 'features/home/home_page.dart';
 import 'features/cart/cart_page.dart';
 import 'features/order/order_detail_page.dart';
@@ -34,6 +35,7 @@ class App extends StatelessWidget {
               '/': (context) => const HomePage(),
               '/clients': (context) => const ClientListPage(),
               '/clients/form': (context) => const ClientFormPage(),
+              '/clients/detail': (context) => const ClientDetailPage(),
               '/products': (context) => const ProductListPage(),
               '/products/form': (context) => const ProductFormPage(),
               '/categories': (context) => const CategoryListPage(),
