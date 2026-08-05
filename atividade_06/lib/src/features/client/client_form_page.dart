@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:vendas_app/src/models/client_model.dart';
 import 'package:vendas_app/src/features/client/client_viewmodel.dart';
@@ -15,13 +16,32 @@ class _ClientFormPageState extends State<ClientFormPage> {
   final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
+  final _birthDateController = TextEditingController();
+  DateTime? _birthDate;
 
   @override
   void dispose() {
     _nameController.dispose();
     _emailController.dispose();
     _phoneController.dispose();
+    _birthDateController.dispose();
     super.dispose();
+  }
+
+  Future<void> _pickBirthDate() async {
+    final now = DateTime.now();
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: _birthDate ?? DateTime(now.year - 18, now.month, now.day),
+      firstDate: DateTime(1900),
+      lastDate: now,
+    );
+    if (picked != null) {
+      setState(() {
+        _birthDate = picked;
+        _birthDateController.text = DateFormat('dd/MM/yyyy').format(picked);
+      });
+    }
   }
 
   void _saveForm() async {
@@ -30,6 +50,7 @@ class _ClientFormPageState extends State<ClientFormPage> {
         name: _nameController.text.trim(),
         email: _emailController.text.trim(),
         phone: _phoneController.text.trim(),
+        birthDate: _birthDate,
       );
 
       final clientViewModel = context.read<ClientViewModel>();
@@ -94,6 +115,16 @@ class _ClientFormPageState extends State<ClientFormPage> {
                   }
                   return null;
                 },
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _birthDateController,
+                readOnly: true,
+                decoration: const InputDecoration(
+                  labelText: 'Data de Nascimento (Opcional)',
+                  suffixIcon: Icon(Icons.calendar_today),
+                ),
+                onTap: _pickBirthDate,
               ),
               const SizedBox(height: 32),
               ElevatedButton(
