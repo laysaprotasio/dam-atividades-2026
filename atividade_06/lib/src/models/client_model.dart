@@ -30,4 +30,16 @@ class ClientModel {
       birthDate: birthDate ?? this.birthDate,
     );
   }
+
+  int? get age {
+    if (birthDate == null) return null;
+
+    final today = DateTime.now();
+    var age = today.year - birthDate!.year;
+    final hasNotHadBirthdayThisYear =
+        today.month < birthDate!.month || (today.month == birthDate!.month && today.day < birthDate!.day);
+    if (hasNotHadBirthdayThisYear) age--;
+
+    return age;
+  }
 }
