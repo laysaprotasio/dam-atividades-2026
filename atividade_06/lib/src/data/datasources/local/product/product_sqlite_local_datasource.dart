@@ -44,6 +44,7 @@ class ProductSqliteLocalDatasource implements ProductLocalDatasource {
       'name': product.name,
       'price': product.price,
       'imageUrl': product.imageUrl,
+      'imagePath': product.imagePath,
       'category': product.category,
       'isFavorite': product.isFavorite ? 1 : 0,
     };
@@ -55,6 +56,7 @@ class ProductSqliteLocalDatasource implements ProductLocalDatasource {
       name: map['name'] as String,
       price: (map['price'] as num).toDouble(),
       imageUrl: map['imageUrl'] as String,
+      imagePath: map['imagePath'] as String?,
       category: map['category'] as String,
       isFavorite: (map['isFavorite'] as int) == 1,
     );

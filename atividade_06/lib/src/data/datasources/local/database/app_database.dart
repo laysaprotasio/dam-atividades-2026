@@ -19,8 +19,13 @@ class AppDatabase {
 
     return openDatabase(
       path,
-      version: 1,
+      version: 2,
       onConfigure: (db) => db.execute('PRAGMA foreign_keys = ON'),
+      onUpgrade: (db, oldVersion, newVersion) async {
+        if (oldVersion < 2) {
+          await db.execute('ALTER TABLE products ADD COLUMN imagePath TEXT');
+        }
+      },
       onCreate: (db, version) async {
         await db.execute('''
           CREATE TABLE clients (
@@ -44,6 +49,7 @@ class AppDatabase {
             name TEXT NOT NULL,
             price REAL NOT NULL,
             imageUrl TEXT NOT NULL,
+            imagePath TEXT,
             category TEXT NOT NULL,
             isFavorite INTEGER NOT NULL DEFAULT 0
           )
