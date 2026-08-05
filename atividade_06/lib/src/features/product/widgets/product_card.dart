@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:vendas_app/src/application/helpers/currency_helper.dart';
 import 'package:vendas_app/src/features/cart/cart_viewmodel.dart';
@@ -18,6 +20,32 @@ class ProductCard extends StatelessWidget {
   // Ajustes de layout do card
   static const double _cardRadius = 24.0;
   static const double _notchRadius = 22.0; // raio do "furo" atrás do botão
+
+  Widget _buildImage() {
+    final imagePath = product.imagePath;
+    if (imagePath != null && File(imagePath).existsSync()) {
+      return Image.file(File(imagePath), fit: BoxFit.cover);
+    }
+
+    if (product.imageUrl.isNotEmpty) {
+      return Image.network(
+        product.imageUrl,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) => _imagePlaceholder(),
+      );
+    }
+
+    return _imagePlaceholder();
+  }
+
+  Widget _imagePlaceholder() {
+    return const ColoredBox(
+      color: Color(0xFFEDEDED),
+      child: Center(
+        child: Icon(Icons.image, size: 40, color: Colors.grey),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,23 +82,7 @@ class ProductCard extends StatelessWidget {
                     fit: StackFit.expand,
                     children: [
                       // Imagem de fundo
-                      product.imageUrl.isNotEmpty
-                          ? Image.network(
-                              product.imageUrl,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) => const ColoredBox(
-                                color: Color(0xFFEDEDED),
-                                child: Center(
-                                  child: Icon(Icons.broken_image, size: 40, color: Colors.grey),
-                                ),
-                              ),
-                            )
-                          : const ColoredBox(
-                              color: Color(0xFFEDEDED),
-                              child: Center(
-                                child: Icon(Icons.image, size: 40, color: Colors.grey),
-                              ),
-                            ),
+                      _buildImage(),
 
                       // Gradiente suave para legibilidade do texto
                       DecoratedBox(
