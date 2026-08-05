@@ -27,10 +27,11 @@ class ClientDetailPage extends StatelessWidget {
             Text('Nome: ${client.name}'),
             Text('E-mail: ${client.email}'),
             Text('Telefone: ${client.phone}'),
-            Text(
-              'Data de Nascimento: ${client.birthDate != null ? DateFormat('dd/MM/yyyy').format(client.birthDate!) : 'Não informada'}',
-            ),
-            Text('Idade: ${client.age != null ? '${client.age} anos' : 'Não informada'}'),
+            if (client.birthDate != null) ...[
+              Text('Data de Nascimento: ${DateFormat('dd/MM/yyyy').format(client.birthDate!)}'),
+              Text('Idade: ${client.age} anos'),
+            ] else
+              const Text('Data de nascimento não informada'),
           ],
         ),
       ),
